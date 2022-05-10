@@ -1,0 +1,23 @@
+.btn-login {
+    font-weight: 700;
+    font-size: 18px;
+    position: relative;
+
+    &::after{
+        content: '';
+        display: block;
+        position: absolute;
+        width: 40%;
+        height: 3px;
+        background-color: #000;
+        bottom: 0%;
+        transition: .2s ease;
+    }
+
+    &:hover{
+        &::after{
+            width: 100%;
+        }
+        cursor: pointer;
+    }
+}
