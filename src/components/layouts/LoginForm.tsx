@@ -1,5 +1,4 @@
 import React from 'react'
-import { Formik } from 'formik'
 import { FcGoogle } from 'react-icons/fc'
 import FormField from 'components/controls/FormField'
 import { AuthFormProps } from 'types/types'
