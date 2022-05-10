@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { IoMdArrowDropdown } from 'react-icons/io'
 import avatar from 'assets/images/avatar.jpg'
+import { Link } from 'react-router-dom'
 
 type ProfileMenuChildProps = {
     isAuth: boolean
@@ -31,7 +32,9 @@ const AuthenticatedTemplate: React.FC<ProfileMenuChildProps> = ({isAuth, setIsAu
 
 const UnauthenticatedTemplate: React.FC<ProfileMenuChildProps> = ({isAuth, setIsAuth}) => {
     return (
-        <div className='btn-login' onClick={() => setIsAuth(!isAuth)}>Login</div>
+        <Link to='/auth'>
+            <div className='btn-login' onClick={() => setIsAuth(!isAuth)}>Login</div>
+        </Link>
     )
 }
 
