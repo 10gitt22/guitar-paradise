@@ -1,6 +1,7 @@
 import { authAPI } from 'api';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { DocumentData } from 'firebase/firestore';
+import { auth } from 'firebaseConfig';
 import React, { useEffect, useState } from 'react';
 import { FirestoreUser } from 'types/models';
 import { AuthCredentials } from 'types/types';
@@ -15,7 +16,6 @@ export type AuthContextType = {
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<any> = ({ children }) => {
-    const auth = getAuth()
     const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     useEffect(() => {

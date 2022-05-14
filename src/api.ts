@@ -1,7 +1,6 @@
-import { firestore } from "firebaseConfig";
+import { auth, firestore } from "firebaseConfig";
 import {
   createUserWithEmailAndPassword,
-  getAuth,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -10,7 +9,6 @@ import { FirestoreUser } from "types/models";
 
 export const authAPI = {
   async signUpWithEmail(email: string, password: string) {
-    const auth = getAuth();
     const createdUser = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -29,7 +27,6 @@ export const authAPI = {
     return userForFirestore;
   },
 	async loginWithEmail(email: string, password: string) {
-		const auth = getAuth()
 		const logedUser = await signInWithEmailAndPassword(
 			auth,
 			email,
@@ -40,7 +37,6 @@ export const authAPI = {
 		return userFromFirestore.exists() ? userFromFirestore.data() : null
 	},
   async logout() {
-    const auth = getAuth();
     return signOut(auth);
   },
 };
