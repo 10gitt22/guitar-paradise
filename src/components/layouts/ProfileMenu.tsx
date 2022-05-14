@@ -1,53 +1,79 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { User } from "firebase/auth";
 
-import { IoMdArrowDropdown } from 'react-icons/io'
-import avatar from 'assets/images/avatar.jpg'
-import { Link } from 'react-router-dom'
+import useAuth from "hooks/store/useAuth";
 
-type ProfileMenuChildProps = {
-    isAuth: boolean
-    setIsAuth: React.Dispatch<React.SetStateAction<boolean>>
-}
+import { IoMdArrowDropdown } from "react-icons/io";
+import avatar from "assets/images/avatar.jpg";
 
-const AuthenticatedTemplate: React.FC<ProfileMenuChildProps> = ({isAuth, setIsAuth}) => {
-    const [isOpenDropdown, setIsOpenDropdown] = useState(false) 
+type AuthenticatedTemplateProps = {
+  currentUser: User;
+};
 
-    return (
-        <>
-          <div className='profile-menu__dropdown' onClick={() => setIsOpenDropdown(!isOpenDropdown)}>
-                <div className='profile-menu__username'>Yevhen Gitt</div>
-                <div className='profile-menu__avatar' style={{"backgroundImage": `url(${avatar})`}}></div>
-                <IoMdArrowDropdown />
+const AuthenticatedTemplate: React.FC<AuthenticatedTemplateProps> = ({
+  currentUser,
+}) => {
+  const { logout } = useAuth();
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
-                {isOpenDropdown && (
-                    <div className='dropdown-options'>
-                        <div className='dropdown-options__item'>my details</div>
-                        <div className='dropdown-options__item' onClick={() => setIsAuth(!isAuth)}>logout</div>
-                    </div>
-                )}
-          </div>  
-        </>
-    )
-}
-
-const UnauthenticatedTemplate: React.FC<ProfileMenuChildProps> = ({isAuth, setIsAuth}) => {
-    return (
-        <Link to='/auth'>
-            <div className='btn-login' onClick={() => setIsAuth(!isAuth)}>Login</div>
-        </Link>
-    )
-}
-
-const ProfileMenu: React.FC<{}> = () => {
-    const [isAuth, setIsAuth] = useState(false)
+  const handleLogout = () => {
+    logout()
+  };
 
   return (
-    <div className='profile-menu'>
-        {isAuth ? 
-        <AuthenticatedTemplate isAuth={isAuth} setIsAuth={setIsAuth}/> : 
-        <UnauthenticatedTemplate isAuth={isAuth} setIsAuth={setIsAuth}/>} 
-    </div>
-  )
-}
+    <>
+      <div
+        className="profile-menu__dropdown"
+        onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+      >
+        <div className="profile-menu__username">{currentUser.displayName ? currentUser.displayName : currentUser.email}</div>
+        <div
+          className="profile-menu__avatar"
+          style={{ backgroundImage: `url(${avatar})` }}
+        ></div>
+        <IoMdArrowDropdown />
 
-export default ProfileMenu
+        {isOpenDropdown && (
+          <div className="dropdown-options">
+            <div className="dropdown-options__item">my details</div>
+            <div
+              className="dropdown-options__item"
+              onClick={() => handleLogout()}
+            >
+              logout
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+const UnauthenticatedTemplate: React.FC<{}> = () => {
+  return (
+    <Link to="/auth">
+      <div className="btn-login">Login</div>
+    </Link>
+  );
+};
+
+const ProfileMenu: React.FC<{}> = () => {
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+	console.log(currentUser, 'current user');
+  }, [currentUser])
+
+  return (
+    <div className="profile-menu">
+      {currentUser ? (
+        <AuthenticatedTemplate currentUser={currentUser} />
+      ) : (
+        <UnauthenticatedTemplate />
+      )}
+    </div>
+  );
+};
+
+export default ProfileMenu;
