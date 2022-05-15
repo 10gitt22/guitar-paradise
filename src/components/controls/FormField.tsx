@@ -15,7 +15,6 @@ const FormField: React.FC<FormFieldProps> = ({
   label,
   innerRef,
   placeholder, 
-  error,
 }) => {
 
   return (
