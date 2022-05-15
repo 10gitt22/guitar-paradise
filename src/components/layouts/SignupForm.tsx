@@ -7,7 +7,7 @@ import { AuthFormProps } from 'types/types'
 import { FcGoogle } from 'react-icons/fc'
 
 const SignupForm: React.FC<AuthFormProps> = ({setHasAccount}) => {
-  const { signUpWithEmail } = useAuth()
+  const { signUpWithEmail, loginWithGoogle } = useAuth()
   const navigation = useNavigate()
 
   const emailRef = useRef<HTMLInputElement>(null)
@@ -30,7 +30,10 @@ const SignupForm: React.FC<AuthFormProps> = ({setHasAccount}) => {
         <FormField type='password' label='Password' name='password' innerRef={passwordRef}/>
         {/* <FormField type='password' label='Confirm password' name='confirm_password'/> */}
         <button className='form-submit'>Signup</button>
-        <button className='form-submit google'>
+        <button className='form-submit google' onClick={() => { 
+          loginWithGoogle()
+          navigation('/')
+        }}>
             <span>Signup with Google</span>
             <FcGoogle />
         </button>

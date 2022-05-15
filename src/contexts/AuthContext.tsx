@@ -1,15 +1,14 @@
-import { authAPI } from 'api';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { DocumentData } from 'firebase/firestore';
-import { auth } from 'firebaseConfig';
 import React, { useEffect, useState } from 'react';
-import { FirestoreUser } from 'types/models';
+import { auth } from 'firebaseConfig';
+import { onAuthStateChanged, User, UserCredential } from 'firebase/auth';
+import { authAPI } from 'api';
 import { AuthCredentials } from 'types/types';
 
 export type AuthContextType = {
     currentUser: User | null
-    signUpWithEmail: (credentials: AuthCredentials) => Promise<FirestoreUser>
-    loginWithEmail: (credentials: AuthCredentials) => Promise<DocumentData | null>
+    signUpWithEmail: (credentials: AuthCredentials) => Promise<UserCredential>
+    loginWithEmail: (credentials: AuthCredentials) => Promise<UserCredential>
+    loginWithGoogle: () => Promise<UserCredential>
     logout: () => Promise<void>
 }
 
@@ -33,6 +32,10 @@ const AuthProvider: React.FC<any> = ({ children }) => {
         return authAPI.loginWithEmail(credentials.email, credentials.password)
     }
 
+    function loginWithGoogle() {
+        return authAPI.loginWithGoogle()
+    }
+
     function logout() {
         return authAPI.logout();
     }
@@ -41,6 +44,7 @@ const AuthProvider: React.FC<any> = ({ children }) => {
         currentUser,
         signUpWithEmail,
         loginWithEmail,
+        loginWithGoogle,
         logout
     }
 

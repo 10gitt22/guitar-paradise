@@ -1,7 +1,9 @@
 import { auth, firestore } from "firebaseConfig";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import { doc, DocumentData, DocumentReference, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -24,18 +26,36 @@ export const authAPI = {
       photoUrl: createdUser.user.photoURL,
     };
 		await userAPI.addUser(userForFirestore);
-    return userForFirestore;
+    
+    return createdUser;
   },
 	async loginWithEmail(email: string, password: string) {
-		const logedUser = await signInWithEmailAndPassword(
-			auth,
+    const logedUser = await signInWithEmailAndPassword(
+      auth,
 			email,
 			password
-		)
-		
-		const userFromFirestore = await userAPI.getUser(logedUser.user.uid)
-		return userFromFirestore.exists() ? userFromFirestore.data() : null
-	},
+    )  
+    return logedUser
+  },
+  async loginWithGoogle() {
+    const provider = new GoogleAuthProvider()
+    const userResponse = await signInWithPopup(auth, provider)
+
+    const isExist = (await userAPI.getUser(userResponse.user.uid)).exists()
+
+    if (!isExist) {
+      const userForFirestore: FirestoreUser = {
+        id: userResponse.user.uid,
+        displayName: userResponse.user.displayName
+          ? userResponse.user.displayName
+          : userResponse.user.email,
+        role: "user",
+        photoUrl: userResponse.user.photoURL,
+      };
+      await userAPI.addUser(userForFirestore);
+    }
+    return userResponse
+  },
   async logout() {
     return signOut(auth);
   },

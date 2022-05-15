@@ -5,7 +5,6 @@ import { User } from "firebase/auth";
 import useAuth from "hooks/store/useAuth";
 
 import { IoMdArrowDropdown } from "react-icons/io";
-import avatar from "assets/images/avatar.jpg";
 
 type AuthenticatedTemplateProps = {
   currentUser: User;
@@ -30,7 +29,7 @@ const AuthenticatedTemplate: React.FC<AuthenticatedTemplateProps> = ({
         <div className="profile-menu__username">{currentUser.displayName ? currentUser.displayName : currentUser.email}</div>
         <div
           className="profile-menu__avatar"
-          style={{ backgroundImage: `url(${avatar})` }}
+          style={{ backgroundImage: `url(${currentUser.photoURL})` }}
         ></div>
         <IoMdArrowDropdown />
 
