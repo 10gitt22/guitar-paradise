@@ -2,7 +2,6 @@ import React from "react";
 import { BsCart } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
 import { Product } from "types/models";
-import { Link } from "react-router-dom";
 
 type ProductGridCardProps = {
   data: Product;
