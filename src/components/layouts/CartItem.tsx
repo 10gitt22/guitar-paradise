@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CartItemType } from "types/types";
 import { RiDeleteBackLine } from "react-icons/ri";
 import useCart from "hooks/store/useCart";

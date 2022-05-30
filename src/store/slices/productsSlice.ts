@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { productsAPI } from "api";
-import store, { RootState } from "store/store";
+import { RootState } from "store/store";
 import { Product } from "types/models";
 
 type ProductsInitialState = {
