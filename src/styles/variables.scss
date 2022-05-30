@@ -1,0 +1,14 @@
+$dark: #333;
+$dark_difference: rgb(204, 204, 204);
+$light: #fff;
+$light_gray: #eee;
+$gray: #ddd;
+$red: rgb(186, 0, 0);
+
+$gradient_color_1: rgba(150, 234, 255, 0.931);
+$gradient_color_2: rgb(255, 101, 252);
+$primary_gradient: linear-gradient(
+  30deg,
+  $gradient_color_1 0%,
+  $gradient_color_2 100%
+);

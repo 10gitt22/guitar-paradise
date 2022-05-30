@@ -6,8 +6,20 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import { doc, DocumentData, DocumentReference, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { FirestoreUser } from "types/models";
+import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  DocumentReference,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { FirestoreUser, OrderData, Product } from "types/models";
+
+const productsRef = collection(firestore, "products");
 
 export const authAPI = {
   async signUpWithEmail(email: string, password: string) {
@@ -25,23 +37,19 @@ export const authAPI = {
       role: "user",
       photoUrl: createdUser.user.photoURL,
     };
-		await userAPI.addUser(userForFirestore);
-    
+    await userAPI.addUser(userForFirestore);
+
     return createdUser;
   },
-	async loginWithEmail(email: string, password: string) {
-    const logedUser = await signInWithEmailAndPassword(
-      auth,
-			email,
-			password
-    )  
-    return logedUser
+  async loginWithEmail(email: string, password: string) {
+    const logedUser = await signInWithEmailAndPassword(auth, email, password);
+    return logedUser;
   },
   async loginWithGoogle() {
-    const provider = new GoogleAuthProvider()
-    const userResponse = await signInWithPopup(auth, provider)
+    const provider = new GoogleAuthProvider();
+    const userResponse = await signInWithPopup(auth, provider);
 
-    const isExist = (await userAPI.getUser(userResponse.user.uid)).exists()
+    const isExist = (await userAPI.getUser(userResponse.user.uid)).exists();
 
     if (!isExist) {
       const userForFirestore: FirestoreUser = {
@@ -54,7 +62,7 @@ export const authAPI = {
       };
       await userAPI.addUser(userForFirestore);
     }
-    return userResponse
+    return userResponse;
   },
   async logout() {
     return signOut(auth);
@@ -62,21 +70,44 @@ export const authAPI = {
 };
 
 export const userAPI = {
-	async getUser(id: string) {
-		const user = await getDoc(doc(firestore, "users", id))
-		return user
-	},
+  async getUser(id: string) {
+    const user = await getDoc(doc(firestore, "users", id));
+    return user;
+  },
   async addUser(userData: FirestoreUser) {
-    await setDoc(doc(firestore, 'users', userData.id), {
-				...userData
-		});
+    await setDoc(doc(firestore, "users", userData.id), {
+      ...userData,
+    });
   },
   async updateUser(id: string, userData: DocumentReference<DocumentData>) {
-      const docRef = doc(firestore, "users", id)
-			await updateDoc(docRef, {
-				...userData,
-				id: id
-			})
-  }
+    const docRef = doc(firestore, "users", id);
+    await updateDoc(docRef, {
+      ...userData,
+      id: id,
+    });
+  },
 };
 
+export const productsAPI = {
+  async getProducts() {
+    const productsSnap = await getDocs(productsRef);
+    const response = productsSnap.docs.map((product) => product.data());
+    return response as Product[];
+  },
+};
+
+export const ordersAPI = {
+  async createOrder(userId: string, orderData: OrderData) {
+    const userRef = doc(firestore, "users", userId);
+    const orderCollection = collection(userRef, "orders");
+
+    const orderRef = await addDoc(orderCollection, {
+      ...orderData,
+    });
+
+    await updateDoc(orderRef, {
+      ...orderData,
+      id: orderRef.id,
+    });
+  },
+};
