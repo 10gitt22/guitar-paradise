@@ -7,6 +7,7 @@ import {
   signOut,
 } from "firebase/auth";
 import {
+  addDoc,
   collection,
   doc,
   DocumentData,
@@ -16,7 +17,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { FirestoreUser, Product } from "types/models";
+import { FirestoreUser, OrderData, Product } from "types/models";
 
 const productsRef = collection(firestore, "products");
 
@@ -92,5 +93,21 @@ export const productsAPI = {
     const productsSnap = await getDocs(productsRef);
     const response = productsSnap.docs.map((product) => product.data());
     return response as Product[];
+  },
+};
+
+export const ordersAPI = {
+  async createOrder(userId: string, orderData: OrderData) {
+    const userRef = doc(firestore, "users", userId);
+    const orderCollection = collection(userRef, "orders");
+
+    const orderRef = await addDoc(orderCollection, {
+      ...orderData,
+    });
+
+    await updateDoc(orderRef, {
+      ...orderData,
+      id: orderRef.id,
+    });
   },
 };

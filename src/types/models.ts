@@ -1,3 +1,5 @@
+import { CartItemType } from "./types";
+
 export interface FirestoreUser {
   id: string;
   displayName: string | null;
@@ -13,9 +15,19 @@ export interface Product {
   images: ProductImages;
   model: string;
   price: number;
+  quantity: number;
 }
 
 export type ProductImages = {
   main: string;
   photos: string[];
 };
+
+export interface OrderData {
+  totalPrice: number;
+  products: CartItemType[];
+}
+
+export interface Order extends OrderData {
+  id: string;
+}

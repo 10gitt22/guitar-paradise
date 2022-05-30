@@ -1,5 +1,5 @@
+import React from "react";
 import ProductGridCard from "components/layouts/ProductGridCard";
-import React, { useEffect } from "react";
 import { Product } from "types/models";
 
 type ProductsGridProps = {

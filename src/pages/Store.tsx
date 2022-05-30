@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Logo from "components/layouts/Logo";
 import ProductsGrid from "components/layouts/ProductsGrid";
 import useProducts from "hooks/store/useProducts";
