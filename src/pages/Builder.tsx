@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Logo from "components/layouts/Logo";
 
 const Builder = () => {
   return (
-    <div>Builder</div>
-  )
-}
+    <div className="page">
+      <Logo name="builder" />
+    </div>
+  );
+};
 
-export default Builder
+export default Builder;

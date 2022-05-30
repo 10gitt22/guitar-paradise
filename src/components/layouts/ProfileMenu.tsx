@@ -17,7 +17,7 @@ const AuthenticatedTemplate: React.FC<AuthenticatedTemplateProps> = ({
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   const handleLogout = () => {
-    logout()
+    logout();
   };
 
   return (
@@ -26,7 +26,11 @@ const AuthenticatedTemplate: React.FC<AuthenticatedTemplateProps> = ({
         className="profile-menu__dropdown"
         onClick={() => setIsOpenDropdown(!isOpenDropdown)}
       >
-        <div className="profile-menu__username">{currentUser.displayName ? currentUser.displayName : currentUser.email}</div>
+        <div className="profile-menu__username">
+          {currentUser.displayName
+            ? currentUser.displayName
+            : currentUser.email}
+        </div>
         <div
           className="profile-menu__avatar"
           style={{ backgroundImage: `url(${currentUser.photoURL})` }}
@@ -59,10 +63,6 @@ const UnauthenticatedTemplate: React.FC<{}> = () => {
 
 const ProfileMenu: React.FC<{}> = () => {
   const { currentUser } = useAuth();
-
-  useEffect(() => {
-	console.log(currentUser, 'current user');
-  }, [currentUser])
 
   return (
     <div className="profile-menu">

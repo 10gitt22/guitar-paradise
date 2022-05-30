@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Logo from "components/layouts/Logo";
 
 const Workshop = () => {
   return (
-    <div>Workshop</div>
-  )
-}
+    <div className="page">
+      <Logo name="workshop" />
+    </div>
+  );
+};
 
-export default Workshop
+export default Workshop;
